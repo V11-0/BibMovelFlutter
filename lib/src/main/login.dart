@@ -1,3 +1,4 @@
+import 'package:bibmovel/src/main/values/strings.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatelessWidget {
@@ -5,7 +6,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: Text(login),
       ),
       body: Builder(
         builder: (BuildContext context) {
@@ -15,12 +16,12 @@ class Login extends StatelessWidget {
               TextFormField(
                 decoration: const InputDecoration(
                   icon: Icon(Icons.person),
-                  hintText: 'Usuario',
-                  labelText: 'Nome',
+                  hintText: usuario,
+                  labelText: nome,
                 ),
                 validator: (String value) {
                   if (value.isEmpty)
-                    return "Não deve estar vazio";
+                    return naoDeveEstarVazio;
 
                   return null;
                 },
@@ -28,12 +29,12 @@ class Login extends StatelessWidget {
               TextFormField(
                 decoration: const InputDecoration(
                   icon: Icon(Icons.lock),
-                  hintText: 'Senha',
-                  labelText: 'Senha',
+                  hintText: senha,
+                  labelText: senha,
                 ),
                 validator: (String value) {
                   if (value.isEmpty)
-                    return "Não deve estar vazio";
+                    return naoDeveEstarVazio;
 
                   return null;
                 },
@@ -43,7 +44,7 @@ class Login extends StatelessWidget {
                   final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
                   Scaffold.of(context).showSnackBar(snackBar);
                 },
-                child: Text("Login"),
+                child: Text(login),
               ),
             ],
           );
