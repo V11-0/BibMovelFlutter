@@ -1,4 +1,6 @@
+import 'package:bibmovel/src/main/pages/principal.dart';
 import 'package:bibmovel/src/main/values/strings.dart';
+
 import 'package:flutter/material.dart';
 
 class Login extends StatelessWidget {
@@ -41,8 +43,23 @@ class Login extends StatelessWidget {
               ),
               RaisedButton(
                 onPressed: () {
-                  final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
+                  final snackBar = SnackBar(
+                      content: Row(
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            child: Text("Entrando"),
+                          )
+                        ],
+                  ));
                   Scaffold.of(context).showSnackBar(snackBar);
+                  Future.delayed(Duration(seconds: 2), () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => Principal()),
+                            (Route<dynamic> route) => false);
+                  });
                 },
                 child: Text(login),
               ),
