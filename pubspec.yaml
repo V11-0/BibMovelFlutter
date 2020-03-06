@@ -20,8 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dio: ^3.0.8
-  shared_preferences: ^0.5.6+1
+  dio: ^3.0.9
+  shared_preferences: ^0.5.6+2
   intro_views_flutter: ^2.8.0
 
   cupertino_icons: ^0.1.3

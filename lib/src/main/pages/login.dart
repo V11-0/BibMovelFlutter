@@ -1,4 +1,4 @@
-import 'package:bibmovel/src/main/pages/principal.dart';
+import 'package:bibmovel/src/main/pages/home.dart';
 import 'package:bibmovel/src/main/values/strings.dart';
 
 import 'package:flutter/material.dart';

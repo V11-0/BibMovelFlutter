@@ -1,5 +1,5 @@
 import 'package:bibmovel/src/main/pages/intro.dart';
-import 'package:bibmovel/src/main/pages/principal.dart';
+import 'package:bibmovel/src/main/pages/home.dart';
 import 'package:bibmovel/src/main/values/internals.dart';
 import 'package:bibmovel/src/main/values/strings.dart';
 
