@@ -22,9 +22,9 @@ class BibMovel extends StatefulWidget {
 }
 
 class _BibMovelState extends State<BibMovel> {
-  var _imageAlignment = Alignment.centerLeft;
-  var _imageOpacity = 0.0;
-  var _barVisible = false;
+  Alignment _imageAlignment = Alignment.centerLeft;
+  double _imageOpacity = 0.0;
+  bool _barVisible = false;
 
   @override
   Widget build(BuildContext context) {
