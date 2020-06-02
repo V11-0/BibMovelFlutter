@@ -1,88 +1,104 @@
-import 'dart:ui';
-
-import 'package:bibmovel/src/main/pages/home.dart';
 import 'package:bibmovel/src/main/values/internals.dart';
-import 'package:bibmovel/src/main/values/strings.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarColor: Color(0xFF1E3188)));
+
     return Scaffold(
-        body: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [const Color(0xFF40CED5), const Color(0xFF3252E3)],
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF267B7F), Color(0xFF1E3188)],
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 40.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 6,
-                child: Image.asset(pathImages + 'logo.png')
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 36.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                TextFormField(
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: usuario,
-                    labelText: nome,
-                  ),
-                  validator: (String value) {
-                    if (value.isEmpty) return naoDeveEstarVazio;
-
-                    return null;
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 42.0),
+                  child: SizedBox(child: Image.asset(pathImages + 'logo.png'), width: 240.0, height: 240.0),
                 ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.lock),
-                    hintText: senha,
-                    labelText: senha,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                            hintText: 'Email',
+                            fillColor: Colors.white.withOpacity(0.5),
+                            filled: true,
+                            border: new OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(100.0),
+                              ),
+                            )),
+                      ),
+                      Divider(color: Colors.black.withOpacity(0), height: 25.0),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            hintText: 'Senha',
+                            fillColor: Colors.white.withOpacity(0.5),
+                            filled: true,
+                            border: new OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(100.0),
+                              ),
+                            )),
+                      )
+                    ],
                   ),
-                  validator: (String value) {
-                    if (value.isEmpty) return naoDeveEstarVazio;
-
-                    return null;
-                  },
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 6.0, right: 6.0),
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text("Esqueceu sua senha!?",
+                          style: TextStyle(color: Colors.blue[400], decoration: TextDecoration.underline))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 54.0),
+                  child: Center(
+                    child: RaisedButton(
+                      child: Text("Entrar"),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 142.0),
+                      child: Text("Não Possui uma conta!?",
+                          style:
+                              TextStyle(color: Colors.blue[400], decoration: TextDecoration.underline, fontSize: 18.0)),
+                    ))
               ],
             ),
-            RaisedButton(
-              onPressed: () {
-                SnackBar snackBar = SnackBar(
-                    content: Row(
-                      children: <Widget>[
-                        CircularProgressIndicator(),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: Text("Entrando"),
-                        )
-                      ],
-                    ));
-                Scaffold.of(context).showSnackBar(snackBar);
-                Future.delayed(Duration(seconds: 2), () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Principal()),
-                          (Route<dynamic> route) => false);
-                });
-              },
-              child: Text(login),
-            ),
-          ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }

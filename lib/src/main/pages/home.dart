@@ -1,13 +1,14 @@
-import 'package:bibmovel/src/main/values/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class Principal extends StatefulWidget {
+import 'package:bibmovel/src/main/values/strings.dart';
+
+class Home extends StatefulWidget {
   @override
-  _PrincipalState createState() => _PrincipalState();
+  _HomeState createState() => _HomeState();
 }
 
-class _PrincipalState extends State<Principal> {
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

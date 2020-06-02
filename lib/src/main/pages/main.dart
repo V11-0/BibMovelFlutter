@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:bibmovel/src/main/pages/intro.dart';
 import 'package:bibmovel/src/main/pages/home.dart';
 import 'package:bibmovel/src/main/values/internals.dart';
 import 'package:bibmovel/src/main/values/strings.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MaterialApp(
       title: bibmovel,
@@ -64,6 +64,8 @@ class _BibMovelState extends State<BibMovel> {
 
   @override
   void initState() {
+    super.initState();
+
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         _imageAlignment = Alignment.center;
@@ -78,29 +80,22 @@ class _BibMovelState extends State<BibMovel> {
   }
 
   void verifyLogin() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool hasShowIntro = prefs.get(prefsLoginShowedIntro);
 
-    if (hasShowIntro == null) hasShowIntro = false;
+    hasShowIntro ??= false;
 
     if (hasShowIntro) {
-
       String user = prefs.get(prefsLoginUser);
       String email = prefs.get(prefsLoginEmail);
 
       // TODO: 08/02/2020 Aqui será feita uma verificação com a api
 
       Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Principal()),
-              (Route<dynamic> route) => false);
-
+          context, MaterialPageRoute(builder: (context) => Home()), (Route<dynamic> route) => false);
     } else {
       Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Intro()),
-          (Route<dynamic> route) => false);
+          context, MaterialPageRoute(builder: (context) => Intro()), (Route<dynamic> route) => false);
     }
   }
 }
