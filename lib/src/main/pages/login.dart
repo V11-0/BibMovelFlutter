@@ -1,3 +1,4 @@
+import 'package:bibmovel/src/main/utils/AppLocalizations.dart';
 import 'package:bibmovel/src/main/values/internals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,7 +45,7 @@ class _LoginState extends State<Login> {
                     children: <Widget>[
                       TextFormField(
                         decoration: InputDecoration(
-                            hintText: 'Email',
+                            hintText: AppLocalizations.of(context).translate('Email'),
                             fillColor: Colors.white.withOpacity(0.5),
                             filled: true,
                             border: new OutlineInputBorder(
@@ -56,7 +57,7 @@ class _LoginState extends State<Login> {
                       Divider(color: Colors.black.withOpacity(0), height: 25.0),
                       TextFormField(
                         decoration: InputDecoration(
-                            hintText: 'Senha',
+                            hintText: AppLocalizations.of(context).translate('Password'),
                             fillColor: Colors.white.withOpacity(0.5),
                             filled: true,
                             border: new OutlineInputBorder(
@@ -72,14 +73,14 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.only(top: 6.0, right: 6.0),
                   child: Align(
                       alignment: Alignment.centerRight,
-                      child: Text("Esqueceu sua senha!?",
+                      child: Text(AppLocalizations.of(context).translate('ForgotPassword'),
                           style: TextStyle(color: Colors.blue[400], decoration: TextDecoration.underline))),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 54.0),
                   child: Center(
                     child: RaisedButton(
-                      child: Text("Entrar"),
+                      child: Text(AppLocalizations.of(context).translate('LogIn')),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
                       onPressed: () {},
@@ -90,7 +91,7 @@ class _LoginState extends State<Login> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 142.0),
-                      child: Text("Não Possui uma conta!?",
+                      child: Text(AppLocalizations.of(context).translate('DontHaveAnAccount'),
                           style:
                               TextStyle(color: Colors.blue[400], decoration: TextDecoration.underline, fontSize: 18.0)),
                     ))

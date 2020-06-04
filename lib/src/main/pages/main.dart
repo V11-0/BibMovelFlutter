@@ -1,4 +1,6 @@
+import 'package:bibmovel/src/main/utils/AppLocalizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +15,15 @@ void main() => runApp(MaterialApp(
         primarySwatch: Colors.blue,
         accentColor: Colors.blueAccent,
       ),
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('pt', 'BR'),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       home: BibMovel(),
     ));
 
