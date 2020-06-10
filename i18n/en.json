@@ -3,5 +3,7 @@
   "Password" : "Password",
   "ForgotPassword": "Forgot Password!?",
   "DontHaveAnAccount": "Don't Have an Account!?",
-  "LogIn": "Log In"
+  "LogIn": "Log In",
+  "User": "User",
+  "ConfirmPassword": "Confirm Password"
 }

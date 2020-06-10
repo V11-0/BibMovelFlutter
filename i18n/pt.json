@@ -3,5 +3,7 @@
   "Password" : "Senha",
   "ForgotPassword": "Esqueceu sua Senha!?",
   "DontHaveAnAccount": "Não Possui uma Conta!?",
-  "LogIn": "Entrar"
+  "LogIn": "Entrar",
+  "User": "Usuário",
+  "ConfirmPassword": "Confirme a senha"
 }
