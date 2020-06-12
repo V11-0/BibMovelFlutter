@@ -1,9 +1,14 @@
+import 'dart:convert';
+
+import 'package:bibmovel/src/main/models/usuario.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:bibmovel/src/main/utils/AppLocalizations.dart';
 import 'package:bibmovel/src/main/values/internals.dart';
+import 'package:validators/validators.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -154,6 +159,7 @@ class _LoginState extends State<Login> {
               children: <Widget>[
                 TextFormField(
                     textInputAction: TextInputAction.next,
+                    maxLength: 49,
                     focusNode: userFocus,
                     decoration: InputDecoration(
                         labelText: AppLocalizations.of(context).translate('User'),
@@ -176,6 +182,7 @@ class _LoginState extends State<Login> {
                   child: TextFormField(
                       textInputAction: TextInputAction.next,
                       focusNode: emailFocus,
+                      maxLength: 128,
                       decoration: InputDecoration(
                           labelText: AppLocalizations.of(context).translate('Email'),
                           border: new OutlineInputBorder(
@@ -183,7 +190,11 @@ class _LoginState extends State<Login> {
                             const Radius.circular(100.0),
                           ))),
                       validator: (value) {
-                        if (value.isEmpty) return 'Não pode estar vazio';
+                        if (value.isEmpty) {
+                          return 'Não pode estar vazio';
+                        } else if (!isEmail(value)) {
+                          return 'Digite um Email Válido';
+                        }
 
                         return null;
                       },
@@ -203,14 +214,19 @@ class _LoginState extends State<Login> {
                         const Radius.circular(100.0),
                       ))),
                   validator: (value) {
-                    if (value.isEmpty) return 'Não pode estar vazio';
+                    if (value.isEmpty) {
+                      return 'Não pode estar vazio';
+                    }
 
                     return null;
                   },
                   onFieldSubmitted: (term) {
                     _fieldFocusChange(context, passFocus, confirmPassFocus);
                   },
-                  onSaved: (value) => _senhaCadastro = value,
+                  onSaved: (value) {
+                    var bytes = utf8.encode(value);
+                    _senhaCadastro = sha512.convert(bytes).bytes.toString();
+                  }
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -231,7 +247,10 @@ class _LoginState extends State<Login> {
                       onFieldSubmitted: (term) {
                         _verificarCadastroForm();
                       },
-                      onSaved: (value) => _confirmaSenhaCadastro = value,
+                      onSaved: (value) {
+                        var bytes = utf8.encode(value);
+                        _confirmaSenhaCadastro = sha512.convert(bytes).bytes.toString();
+                      }
                   ),
                 )
               ],

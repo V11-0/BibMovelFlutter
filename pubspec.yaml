@@ -27,6 +27,7 @@ dependencies:
   intro_views_flutter: ^2.8.1
   url_launcher: ^5.4.10
   validators: ^2.0.0+1
+  crypto: ^2.1.4
 
   cupertino_icons: ^0.1.3
 
