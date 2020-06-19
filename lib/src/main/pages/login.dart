@@ -1,14 +1,17 @@
 import 'dart:convert';
 
-import 'package:bibmovel/src/main/models/usuario.dart';
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:bibmovel/src/main/utils/AppLocalizations.dart';
-import 'package:bibmovel/src/main/values/internals.dart';
 import 'package:validators/validators.dart';
+import 'package:crypto/crypto.dart';
+
+import 'package:bibmovel/src/main/utils/app_localizations.dart';
+import 'package:bibmovel/src/main/values/internals.dart';
+import 'package:bibmovel/src/main/models/requests/post_usuario_request.dart';
+import 'package:bibmovel/src/main/models/usuario.dart';
+import 'package:bibmovel/src/main/repo/usuario_repo.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -18,6 +21,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   GlobalKey<FormState> _cadastroFormKey;
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _emailLogin;
   String _passLogin;
@@ -25,7 +29,8 @@ class _LoginState extends State<Login> {
   String _userCadastro;
   String _emailCadastro;
   String _senhaCadastro;
-  String _confirmaSenhaCadastro;
+
+  bool _creating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +40,7 @@ class _LoginState extends State<Login> {
     FocusNode passwordFocus = new FocusNode();
 
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -158,57 +164,12 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
-                    textInputAction: TextInputAction.next,
-                    maxLength: 49,
-                    focusNode: userFocus,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).translate('User'),
-                        border: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                          const Radius.circular(100.0),
-                        ))),
-                    validator: (value) {
-                      if (value.isEmpty) return 'Não pode estar vazio';
-
-                      return null;
-                    },
-                    onFieldSubmitted: (term) {
-                      _fieldFocusChange(context, userFocus, emailFocus);
-                    },
-                    onSaved: (value) => _userCadastro = value,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: TextFormField(
-                      textInputAction: TextInputAction.next,
-                      focusNode: emailFocus,
-                      maxLength: 128,
-                      decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context).translate('Email'),
-                          border: new OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                            const Radius.circular(100.0),
-                          ))),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Não pode estar vazio';
-                        } else if (!isEmail(value)) {
-                          return 'Digite um Email Válido';
-                        }
-
-                        return null;
-                      },
-                      onFieldSubmitted: (term) {
-                        _fieldFocusChange(context, emailFocus, passFocus);
-                      },
-                      onSaved: (value) => _emailCadastro = value,
-                  ),
-                ),
-                TextFormField(
                   textInputAction: TextInputAction.next,
-                  focusNode: passFocus,
+                  keyboardType: TextInputType.text,
+                  maxLength: 49,
+                  focusNode: userFocus,
                   decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).translate('Password'),
+                      labelText: AppLocalizations.of(context).translate('User'),
                       border: new OutlineInputBorder(
                           borderRadius: const BorderRadius.all(
                         const Radius.circular(100.0),
@@ -216,22 +177,74 @@ class _LoginState extends State<Login> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Não pode estar vazio';
+                    } else if (value.contains(' ')) {
+                      return 'Não pode conter espaços';
                     }
 
                     return null;
                   },
                   onFieldSubmitted: (term) {
-                    _fieldFocusChange(context, passFocus, confirmPassFocus);
+                    _fieldFocusChange(context, userFocus, emailFocus);
                   },
-                  onSaved: (value) {
-                    var bytes = utf8.encode(value);
-                    _senhaCadastro = sha512.convert(bytes).bytes.toString();
-                  }
+                  onChanged: (value) => _userCadastro = value,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: TextFormField(
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.emailAddress,
+                    focusNode: emailFocus,
+                    maxLength: 128,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).translate('Email'),
+                        border: new OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                          const Radius.circular(100.0),
+                        ))),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Não pode estar vazio';
+                      } else if (!isEmail(value)) {
+                        return 'Digite um Email Válido';
+                      }
+
+                      return null;
+                    },
+                    onFieldSubmitted: (term) {
+                      _fieldFocusChange(context, emailFocus, passFocus);
+                    },
+                    onChanged: (value) => _emailCadastro = value,
+                  ),
+                ),
+                TextFormField(
+                    textInputAction: TextInputAction.next,
+                    obscureText: true,
+                    focusNode: passFocus,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).translate('Password'),
+                        border: new OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                          const Radius.circular(100.0),
+                        ))),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Não pode estar vazio';
+                      }
+
+                      return null;
+                    },
+                    onFieldSubmitted: (term) {
+                      _fieldFocusChange(context, passFocus, confirmPassFocus);
+                    },
+                    onChanged: (value) {
+                      var bytes = utf8.encode(value);
+                      _senhaCadastro = sha512.convert(bytes).toString();
+                    }),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextFormField(
                       textInputAction: TextInputAction.go,
+                      obscureText: true,
                       focusNode: confirmPassFocus,
                       decoration: InputDecoration(
                           labelText: AppLocalizations.of(context).translate('ConfirmPassword'),
@@ -240,18 +253,22 @@ class _LoginState extends State<Login> {
                             const Radius.circular(100.0),
                           ))),
                       validator: (value) {
-                        if (value.isEmpty) return 'Não pode estar vazio';
+                        if (value.isEmpty) {
+                          return 'Não pode estar vazio';
+                        } else {
+                          var bytes = utf8.encode(value);
+                          String confirmacao = sha512.convert(bytes).toString();
 
-                        return null;
+                          if (confirmacao == _senhaCadastro) {
+                            return null;
+                          } else {
+                            return 'As senhas são diferentes';
+                          }
+                        }
                       },
                       onFieldSubmitted: (term) {
                         _verificarCadastroForm();
-                      },
-                      onSaved: (value) {
-                        var bytes = utf8.encode(value);
-                        _confirmaSenhaCadastro = sha512.convert(bytes).bytes.toString();
-                      }
-                  ),
+                      }),
                 )
               ],
             ),
@@ -261,7 +278,8 @@ class _LoginState extends State<Login> {
           FlatButton(
             child: Text('Criar'),
             onPressed: () => _verificarCadastroForm(),
-          )
+          ),
+          _creating? CircularProgressIndicator() : Container()
         ],
       );
     };
@@ -269,18 +287,35 @@ class _LoginState extends State<Login> {
     return builder;
   }
 
-  _verificarCadastroForm() {
+  _verificarCadastroForm() async {
 
     if (_cadastroFormKey.currentState.validate()) {
+      setState(() => _creating = true);
 
+      Usuario usuario = new Usuario(_userCadastro, _emailCadastro, _senhaCadastro);
+      UsuarioPostRequest usuarioRequest = new UsuarioPostRequest(usuario);
+
+      int responseCode = await UsuarioRepo.signUser(usuarioRequest);
+      String texto;
+
+      if (responseCode == 201) {
+        texto = "Cadastro Realizado";
+      } else if (responseCode == 409) {
+        texto = "O Usuário ou o Email está em uso";
+      } else {
+        texto = "Ocorreu um erro, tente mais tarde";
+      }
+
+      Navigator.pop(context);
+      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(texto), duration: Duration(seconds: 4)));
+
+      setState(() => _creating = false);
     }
   }
 
-  _verificarLoginForm() {
+  _verificarLoginForm() {}
 
-  }
-
-  _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }

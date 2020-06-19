@@ -1,4 +1,4 @@
-import 'package:bibmovel/src/main/utils/AppLocalizations.dart';
+import 'package:bibmovel/src/main/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 

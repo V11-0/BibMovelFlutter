@@ -40,6 +40,7 @@ test/
 **/android/**/GeneratedPluginRegistrant.java
 **/android/app/src/debug/
 **/android/app/src/profile/
+.gradle
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
