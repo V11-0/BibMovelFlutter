@@ -37,7 +37,7 @@ class Intro extends StatelessWidget {
         ),
       ],
       onTapDoneButton: () {
-        //registerIntro();
+        registerIntro();
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Login()),

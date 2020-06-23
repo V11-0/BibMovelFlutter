@@ -12,6 +12,8 @@ class Usuario {
 
   Usuario(this._usuario, this._email, this._senha, {nome, id}) : _id = id, _nome = nome;
 
+  Usuario.login(this._email, this._senha);
+
   String get nome => _nome;
 
   set nome(String value) {

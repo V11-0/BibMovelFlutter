@@ -1,17 +1,23 @@
+import 'dart:io' show Platform;
 import 'dart:convert';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:bibmovel/src/main/utils/app_localizations.dart';
 import 'package:bibmovel/src/main/values/internals.dart';
-import 'package:bibmovel/src/main/models/requests/post_usuario_request.dart';
+import 'package:bibmovel/src/main/models/requests/usuario_request.dart';
 import 'package:bibmovel/src/main/models/usuario.dart';
 import 'package:bibmovel/src/main/repo/usuario_repo.dart';
+import 'package:bibmovel/src/main/models/sessao.dart';
+
+import 'home.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -70,6 +76,7 @@ class _LoginState extends State<Login> {
                     children: <Widget>[
                       TextFormField(
                         focusNode: emailFocus,
+                        keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).translate('Email'),
@@ -80,14 +87,24 @@ class _LoginState extends State<Login> {
                                 const Radius.circular(100.0),
                               ),
                             )),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return AppLocalizations.of(context).translate('ShouldNotBeEmpty');
+                          } else if (!isEmail(value)) {
+                            return AppLocalizations.of(context).translate('TypeValidEmail');
+                          }
+
+                          return null;
+                        },
                         onFieldSubmitted: (term) {
                           _fieldFocusChange(context, emailFocus, passwordFocus);
                         },
-                        onSaved: (value) => _emailLogin = value,
+                        onChanged: (value) => _emailLogin = value,
                       ),
                       Divider(color: Colors.black.withOpacity(0), height: 25.0),
                       TextFormField(
                         focusNode: passwordFocus,
+                        obscureText: true,
                         textInputAction: TextInputAction.go,
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).translate('Password'),
@@ -98,10 +115,20 @@ class _LoginState extends State<Login> {
                                 const Radius.circular(100.0),
                               ),
                             )),
-                        onFieldSubmitted: (term) {
-                          // TODO LOGIN
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return AppLocalizations.of(context).translate('ShouldNotBeEmpty');
+                          }
+
+                          return null;
                         },
-                        onSaved: (value) => _passLogin = value,
+                        onFieldSubmitted: (term) {
+                          _verificarLoginForm();
+                        },
+                        onChanged: (value) {
+                          var bytes = utf8.encode(value);
+                          _passLogin = sha512.convert(bytes).toString();
+                        },
                       )
                     ],
                   ),
@@ -120,7 +147,9 @@ class _LoginState extends State<Login> {
                       child: Text(AppLocalizations.of(context).translate('LogIn')),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                      onPressed: () {},
+                      onPressed: () {
+                        _verificarLoginForm();
+                      },
                     ),
                   ),
                 ),
@@ -155,7 +184,7 @@ class _LoginState extends State<Login> {
 
     var builder = (BuildContext context) {
       return AlertDialog(
-        title: Text('Criar uma conta'),
+        title: Text(AppLocalizations.of(context).translate('CreateAccount')),
         content: Form(
           key: _cadastroFormKey,
           child: SingleChildScrollView(
@@ -176,9 +205,9 @@ class _LoginState extends State<Login> {
                       ))),
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Não pode estar vazio';
+                      return AppLocalizations.of(context).translate('ShouldNotBeEmpty');
                     } else if (value.contains(' ')) {
-                      return 'Não pode conter espaços';
+                      return AppLocalizations.of(context).translate('ShouldNotHaveSpaces');
                     }
 
                     return null;
@@ -203,9 +232,9 @@ class _LoginState extends State<Login> {
                         ))),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Não pode estar vazio';
+                        return AppLocalizations.of(context).translate('ShouldNotBeEmpty');
                       } else if (!isEmail(value)) {
-                        return 'Digite um Email Válido';
+                        return AppLocalizations.of(context).translate('TypeValidEmail');
                       }
 
                       return null;
@@ -228,7 +257,7 @@ class _LoginState extends State<Login> {
                         ))),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Não pode estar vazio';
+                        return AppLocalizations.of(context).translate('ShouldNotBeEmpty');
                       }
 
                       return null;
@@ -254,7 +283,7 @@ class _LoginState extends State<Login> {
                           ))),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Não pode estar vazio';
+                          return AppLocalizations.of(context).translate('ShouldNotBeEmpty');
                         } else {
                           var bytes = utf8.encode(value);
                           String confirmacao = sha512.convert(bytes).toString();
@@ -262,7 +291,7 @@ class _LoginState extends State<Login> {
                           if (confirmacao == _senhaCadastro) {
                             return null;
                           } else {
-                            return 'As senhas são diferentes';
+                            return AppLocalizations.of(context).translate('PasswordsNotEquals');
                           }
                         }
                       },
@@ -293,17 +322,17 @@ class _LoginState extends State<Login> {
       setState(() => _creating = true);
 
       Usuario usuario = new Usuario(_userCadastro, _emailCadastro, _senhaCadastro);
-      UsuarioPostRequest usuarioRequest = new UsuarioPostRequest(usuario);
+      UsuarioRequest usuarioRequest = new UsuarioRequest(usuario);
 
       int responseCode = await UsuarioRepo.signUser(usuarioRequest);
       String texto;
 
       if (responseCode == 201) {
-        texto = "Cadastro Realizado";
+        texto = AppLocalizations.of(context).translate('SignUpDone');
       } else if (responseCode == 409) {
-        texto = "O Usuário ou o Email está em uso";
+        texto = AppLocalizations.of(context).translate('UserOrEmailIsInUse');
       } else {
-        texto = "Ocorreu um erro, tente mais tarde";
+        texto = AppLocalizations.of(context).translate('ErrorOcurredTryAgainLater');
       }
 
       Navigator.pop(context);
@@ -313,7 +342,43 @@ class _LoginState extends State<Login> {
     }
   }
 
-  _verificarLoginForm() {}
+  _verificarLoginForm() async {
+
+    if (_formKey.currentState.validate()) {
+
+      DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
+      List<String> info = [];
+
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        info.add(androidInfo.androidId);
+        info.add(androidInfo.model);
+
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        info.add(iosInfo.identifierForVendor);
+        info.add(iosInfo.model);
+
+      } else {
+
+      }
+
+      Usuario usuario = new Usuario.login(_emailLogin, _passLogin);
+      UsuarioRequest usuarioRequest = new UsuarioRequest(usuario, deviceInfo: info);
+      Sessao sessao = await UsuarioRepo.logUserIn(usuarioRequest);
+
+      if (sessao.id != null) {
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setInt(prefsSessionId, sessao.id);
+        await prefs.setString(prefsSessionHash, sessao.hashcode);
+        await prefs.setString(prefsSessionStartDate, sessao.dataInicio);
+        
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home())
+            , (Route<dynamic> route) => false);
+      }
+    }
+  }
 
   _fieldFocusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();

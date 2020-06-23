@@ -98,9 +98,6 @@ class _BibMovelState extends State<BibMovel> {
 
     if (hasShowIntro) {
       String user = prefs.get(prefsLoginUser);
-      String email = prefs.get(prefsLoginEmail);
-
-      // TODO: 08/02/2020 Aqui será feita uma verificação com a api
 
       Navigator.pushAndRemoveUntil(
           context, MaterialPageRoute(builder: (context) => Home()), (Route<dynamic> route) => false);

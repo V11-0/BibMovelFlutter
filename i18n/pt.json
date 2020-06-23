@@ -5,5 +5,13 @@
   "DontHaveAnAccount": "Não Possui uma Conta!?",
   "LogIn": "Entrar",
   "User": "Usuário",
-  "ConfirmPassword": "Confirme a senha"
+  "ConfirmPassword": "Confirme a senha",
+  "ShouldNotBeEmpty": "Não deve estar vazio",
+  "CreateAccount": "Criar Conta",
+  "ShouldNotHaveSpaces": "Não deve conter espaços",
+  "TypeValidEmail": "Digite um email válido",
+  "PasswordsNotEquals": "As senhas não são iguais",
+  "SignUpDone": "Cadastro realizado",
+  "UserOrEmailIsInUse": "O Usuário ou o Email está em uso",
+  "ErrorOcurredTryAgainLater": "Ocorreu um erro, tente mais tarde"
 }

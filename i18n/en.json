@@ -5,5 +5,12 @@
   "DontHaveAnAccount": "Don't Have an Account!?",
   "LogIn": "Log In",
   "User": "User",
-  "ConfirmPassword": "Confirm Password"
+  "ConfirmPassword": "Confirm Password",
+  "CreateAccount": "Create Account",
+  "ShouldNotHaveSpaces": "Should not have spaces",
+  "TypeValidEmail": "Type a valid email",
+  "PasswordsNotEquals": "Passwords are not the same",
+  "SignUpDone": "Sign Up done",
+  "UserOrEmailIsInUse": "Username or Email is already in use",
+  "ErrorOcurredTryAgainLater": "An error ocurred, try again later"
 }

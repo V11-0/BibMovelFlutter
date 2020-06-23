@@ -28,7 +28,7 @@ dependencies:
   url_launcher: ^5.4.11
   validators: ^2.0.0+1
   crypto: ^2.1.4
-
+  device_info: '>=0.4.2+4 <2.0.0'
 
   cupertino_icons: ^0.1.3
 
