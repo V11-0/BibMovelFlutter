@@ -4,15 +4,14 @@ import 'package:retrofit/retrofit.dart';
 @Parser.JsonSerializable
 class Usuario {
 
-  int _id;
   String _usuario;
   String _email;
   String _senha;
   String _nome;
 
-  Usuario(this._usuario, this._email, this._senha, {nome, id}) : _id = id, _nome = nome;
-
+  Usuario(this._usuario, this._email, this._senha, {nome}) : _nome = nome;
   Usuario.login(this._email, this._senha);
+  Usuario.load(this._usuario, this._email, this._nome);
 
   String get nome => _nome;
 
@@ -32,14 +31,7 @@ class Usuario {
     _usuario = value;
   }
 
-  int get id => _id;
-
-  set id(int value) {
-    _id = value;
-  }
-
   Usuario.fromJson(Map<String, dynamic> json) {
-    _id = json[fieldId];
     _usuario = json[fieldUsuario];
     _email = json[fieldEmail];
     _nome = json[fieldNome];
@@ -49,7 +41,6 @@ class Usuario {
 
     Map<String, dynamic> user = new Map();
 
-    if (_id != null) user[fieldId] = _id;
     if (_usuario != null) user[fieldUsuario] = _usuario;
     if (_email != null) user[fieldEmail] = _email;
     if (_nome != null) user[fieldNome] = _nome;

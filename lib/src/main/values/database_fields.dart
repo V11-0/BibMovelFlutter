@@ -1,13 +1,14 @@
-// Usados no Json mas nao nas tabelas
+
 const fieldOperationKey = 'operationKey';
 const fieldDeviceInfo = 'deviceInfo';
-
+const fieldSessao = 'sessao';
 const fieldId = 'id';
+const fieldIdUsuario = 'idUsuario';
 const fieldUsuario = 'usuario';
 const fieldNome = 'nome';
 const fieldEmail = 'email';
 const fieldSenha = 'senha';
-const fieldHashCode = 'hash_code';
-const fieldDataInicio = 'data_incio';
-const fieldDeviceUUID = 'device_uuid';
-const fieldDeviceName = 'device_name';
+const fieldHashCode = 'hashCode';
+const fieldDataInicio = 'dataInicio';
+const fieldDeviceUUID = 'deviceUUID';
+const fieldDeviceName = 'deviceName';

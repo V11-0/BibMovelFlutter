@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bibmovel/src/main/models/requests/sessao_request.dart';
+import 'package:bibmovel/src/main/models/usuario.dart';
 import 'package:dio/dio.dart';
 
 import 'package:bibmovel/src/main/models/requests/usuario_request.dart';
@@ -45,7 +47,27 @@ abstract class UsuarioRepo {
 
     } catch (e) {
       print(e);
-      return Sessao.empty();
+      return null;
+    }
+  }
+
+  /// Valida a sessao atual do dispositivo
+  static Future<Usuario> validateSession(SessaoRequest sessaoRequest) async {
+
+    String url = '$apiUrl' 'usuario/validate';
+    Dio dio = new Dio();
+
+    try {
+      Response response = await dio.post(url, data: sessaoRequest.toJson()
+          , options: Options(headers: {"Authorization": "Basic " + base64Url.encode(utf8.encode(authKey))}));
+
+      if (response.statusCode == 200) {
+        return Usuario.fromJson(response.data);
+      }
+
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }

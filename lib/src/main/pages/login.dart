@@ -353,24 +353,21 @@ class _LoginState extends State<Login> {
         AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
         info.add(androidInfo.androidId);
         info.add(androidInfo.model);
-
       } else if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
         info.add(iosInfo.identifierForVendor);
         info.add(iosInfo.model);
-
-      } else {
-
       }
 
       Usuario usuario = new Usuario.login(_emailLogin, _passLogin);
       UsuarioRequest usuarioRequest = new UsuarioRequest(usuario, deviceInfo: info);
       Sessao sessao = await UsuarioRepo.logUserIn(usuarioRequest);
 
-      if (sessao.id != null) {
+      if (sessao != null) {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setInt(prefsSessionId, sessao.id);
+        await prefs.setInt(prefsSessionUserId, sessao.idUsuario);
         await prefs.setString(prefsSessionHash, sessao.hashcode);
         await prefs.setString(prefsSessionStartDate, sessao.dataInicio);
         

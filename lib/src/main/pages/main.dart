@@ -1,13 +1,22 @@
-import 'package:bibmovel/src/main/utils/app_localizations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'dart:io' show Platform;
 
+import 'package:bibmovel/src/main/models/requests/sessao_request.dart';
+import 'package:bibmovel/src/main/models/usuario.dart';
+import 'package:bibmovel/src/main/repo/usuario_repo.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:bibmovel/src/main/pages/intro.dart';
-import 'package:bibmovel/src/main/pages/home.dart';
 import 'package:bibmovel/src/main/values/internals.dart';
 import 'package:bibmovel/src/main/values/strings.dart';
+import 'package:bibmovel/src/main/models/sessao.dart';
+import 'package:bibmovel/src/main/utils/app_localizations.dart';
+
+import 'home.dart';
+import 'intro.dart';
+import 'login.dart';
 
 void main() => runApp(MaterialApp(
       title: bibmovel,
@@ -92,18 +101,20 @@ class _BibMovelState extends State<BibMovel> {
 
   void verifyLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool hasShowIntro = prefs.get(prefsLoginShowedIntro);
+    int sessionId = prefs.getInt(prefsSessionId);
+    bool hasShowIntro = prefs.getBool(prefsLoginShowedIntro);
 
     hasShowIntro ??= false;
 
-    if (hasShowIntro) {
-      String user = prefs.get(prefsLoginUser);
-
-      Navigator.pushAndRemoveUntil(
-          context, MaterialPageRoute(builder: (context) => Home()), (Route<dynamic> route) => false);
+    if (sessionId != null) {
+      Navigator.pushAndRemoveUntil(context
+          , MaterialPageRoute(builder: (context) => Home()), (Route<dynamic> route) => false);
+    } else if (hasShowIntro) {
+      Navigator.pushAndRemoveUntil(context
+          , MaterialPageRoute(builder: (context) => Login()), (Route<dynamic> route) => false);
     } else {
-      Navigator.pushAndRemoveUntil(
-          context, MaterialPageRoute(builder: (context) => Intro()), (Route<dynamic> route) => false);
+      Navigator.pushAndRemoveUntil(context
+          , MaterialPageRoute(builder: (context) => Intro()), (Route<dynamic> route) => false);
     }
   }
 }

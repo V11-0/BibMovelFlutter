@@ -4,10 +4,9 @@ const authKey = 'BIbMooOvElvFlU2@20²0';
 
 const pathImages = 'lib/src/res/images/';
 
-const prefsLoginUser = 'user';
-const prefsLoginEmail = 'email';
 const prefsLoginShowedIntro = 'showedIntro';
 
+const prefsSessionUserId = 'sessionUserId';
 const prefsSessionId = 'sessionId';
 const prefsSessionHash = 'sessionHash';
 const prefsSessionStartDate = 'sessionStartDate';
