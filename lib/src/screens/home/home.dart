@@ -1,16 +1,17 @@
 import 'dart:io' show Platform;
 
-import 'package:bibmovel/src/main/models/requests/sessao_request.dart';
-import 'package:bibmovel/src/main/models/sessao.dart';
-import 'package:bibmovel/src/main/models/usuario.dart';
-import 'package:bibmovel/src/main/repo/sessao_repo.dart';
-import 'package:bibmovel/src/main/values/internals.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'package:bibmovel/src/main/values/strings.dart';
+import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:bibmovel/src/models/requests/sessao_request.dart';
+import 'package:bibmovel/src/models/sessao.dart';
+import 'package:bibmovel/src/models/usuario.dart';
+import 'package:bibmovel/src/repos/sessao_repo.dart';
+import 'package:bibmovel/src/values/internals.dart';
+import 'package:bibmovel/src/values/strings.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -97,11 +98,16 @@ class _HomeState extends State<Home> {
     } catch (e) {
       if (e.response != null) {
         if (e.response.statusCode == 403) {
+          print('FORBIDDEN');
           // TODO: Pede para logar novamente
         } else {
+          print('Server Error');
           // Ocorreu um erro no servidor
         }
-      } else {}
+      } else {
+        // Sem resposta
+        print("Serv Off");
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import 'package:bibmovel/src/main/values/database_fields.dart';
+import 'package:bibmovel/src/values/database_fields.dart';
 
 class Sessao {
 

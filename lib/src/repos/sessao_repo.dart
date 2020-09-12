@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import 'package:bibmovel/src/main/models/requests/sessao_request.dart';
-import 'package:bibmovel/src/main/models/usuario.dart';
-import 'package:bibmovel/src/main/values/internals.dart';
 import 'package:dio/dio.dart';
+
+import 'package:bibmovel/src/models/requests/sessao_request.dart';
+import 'package:bibmovel/src/models/usuario.dart';
+import 'package:bibmovel/src/values/internals.dart';
 
 abstract class SessaoRepo {
 

@@ -1,10 +1,8 @@
-import 'package:bibmovel/src/main/values/database_fields.dart';
-import 'package:retrofit/retrofit.dart';
+import 'package:bibmovel/src/values/database_fields.dart';
+import 'package:bibmovel/src/values/internals.dart';
 
-import 'package:bibmovel/src/main/models/usuario.dart';
-import 'package:bibmovel/src/main/values/internals.dart';
+import '../usuario.dart';
 
-@Parser.JsonSerializable
 class UsuarioRequest {
 
   String operationKey = generalKey;

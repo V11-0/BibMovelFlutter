@@ -1,23 +1,23 @@
 import 'dart:io' show Platform;
 import 'dart:convert';
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:crypto/crypto.dart';
+import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
-import 'package:crypto/crypto.dart';
 
-import 'package:bibmovel/src/main/utils/app_localizations.dart';
-import 'package:bibmovel/src/main/values/internals.dart';
-import 'package:bibmovel/src/main/models/requests/usuario_request.dart';
-import 'package:bibmovel/src/main/models/usuario.dart';
-import 'package:bibmovel/src/main/repo/usuario_repo.dart';
-import 'package:bibmovel/src/main/models/sessao.dart';
+import 'package:bibmovel/src/models/requests/usuario_request.dart';
+import 'package:bibmovel/src/models/sessao.dart';
+import 'package:bibmovel/src/models/usuario.dart';
+import 'package:bibmovel/src/repos/usuario_repo.dart';
+import 'package:bibmovel/src/utils/app_localizations.dart';
+import 'package:bibmovel/src/values/internals.dart';
 
-import 'home.dart';
+import '../home/home.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -155,17 +155,15 @@ class _LoginState extends State<Login> {
                 ),
                 Align(
                     alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 142.0),
-                      child: GestureDetector(
-                        child: Text(AppLocalizations.of(context).translate('DontHaveAnAccount'),
-                            style: TextStyle(
-                                color: Colors.blue[400], decoration: TextDecoration.underline, fontSize: 18.0)),
-                        onTap: () {
-                          showDialog(context: context, builder: _createSignInDialog());
-                        },
-                      ),
-                    ))
+                    child: GestureDetector(
+                      child: Text(AppLocalizations.of(context).translate('DontHaveAnAccount'),
+                          style: TextStyle(
+                              color: Colors.blue[400], decoration: TextDecoration.underline, fontSize: 18.0)),
+                      onTap: () {
+                        showDialog(context: context, builder: _createSignInDialog());
+                      },
+                    )
+                )
               ],
             ),
           ),
@@ -373,6 +371,8 @@ class _LoginState extends State<Login> {
         
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home())
             , (Route<dynamic> route) => false);
+      } else {
+
       }
     }
   }

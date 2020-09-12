@@ -1,7 +1,5 @@
-import 'package:bibmovel/src/main/values/database_fields.dart';
-import 'package:retrofit/retrofit.dart';
+import 'package:bibmovel/src/values/database_fields.dart';
 
-@Parser.JsonSerializable
 class Usuario {
 
   String _usuario;

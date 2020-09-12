@@ -1,11 +1,11 @@
-import 'package:bibmovel/src/main/pages/login.dart';
-import 'package:bibmovel/src/main/values/internals.dart';
+import 'package:flutter/material.dart';
 
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flutter/material.dart';
+import 'package:bibmovel/src/screens/login/login.dart';
+import 'package:bibmovel/src/values/internals.dart';
 
 class Intro extends StatelessWidget {
   // TODO: Internacionalizar
@@ -36,18 +36,14 @@ class Intro extends StatelessWidget {
           mainImage: null,
         ),
       ],
-      onTapDoneButton: () {
-        registerIntro();
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Login()),
-                (Route<dynamic> route) => false);
-      },
+      onTapDoneButton: () => registerIntro(context),
     );
   }
 
-  void registerIntro() async {
+  void registerIntro(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(prefsLoginShowedIntro, true);
+
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login()), (route) => false);
   }
 }

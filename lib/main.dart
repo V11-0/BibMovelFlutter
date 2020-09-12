@@ -1,22 +1,14 @@
-import 'dart:io' show Platform;
-
-import 'package:bibmovel/src/main/models/requests/sessao_request.dart';
-import 'package:bibmovel/src/main/models/usuario.dart';
-import 'package:bibmovel/src/main/repo/usuario_repo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:bibmovel/src/main/values/internals.dart';
-import 'package:bibmovel/src/main/values/strings.dart';
-import 'package:bibmovel/src/main/models/sessao.dart';
-import 'package:bibmovel/src/main/utils/app_localizations.dart';
-
-import 'home.dart';
-import 'intro.dart';
-import 'login.dart';
+import 'src/screens/home/home.dart';
+import 'src/screens/intro/intro.dart';
+import 'src/screens/login/login.dart';
+import 'src/utils/app_localizations.dart';
+import 'src/values/internals.dart';
+import 'src/values/strings.dart';
 
 void main() => runApp(MaterialApp(
       title: bibmovel,
@@ -70,7 +62,7 @@ class _BibMovelState extends State<BibMovel> {
               Padding(
                 padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
                 child: SizedBox(
-                    height: 4,
+                    height: 4.0,
                     width: MediaQuery.of(context).size.width,
                     child: Visibility(
                       child: LinearProgressIndicator(),
@@ -93,9 +85,7 @@ class _BibMovelState extends State<BibMovel> {
         _barVisible = true;
       });
 
-      Future.delayed(Duration(seconds: 2), () {
-        verifyLogin();
-      });
+      Future.delayed(Duration(seconds: 2), verifyLogin);
     });
   }
 
@@ -106,15 +96,16 @@ class _BibMovelState extends State<BibMovel> {
 
     hasShowIntro ??= false;
 
+    var route;
+
     if (sessionId != null) {
-      Navigator.pushAndRemoveUntil(context
-          , MaterialPageRoute(builder: (context) => Home()), (Route<dynamic> route) => false);
+      route = new Home();
     } else if (hasShowIntro) {
-      Navigator.pushAndRemoveUntil(context
-          , MaterialPageRoute(builder: (context) => Login()), (Route<dynamic> route) => false);
+      route = new Login();
     } else {
-      Navigator.pushAndRemoveUntil(context
-          , MaterialPageRoute(builder: (context) => Intro()), (Route<dynamic> route) => false);
+      route = new Intro();
     }
+
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => route), (route) => false);
   }
 }
