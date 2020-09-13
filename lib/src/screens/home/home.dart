@@ -41,19 +41,17 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Column(
-                    children: <Widget>[
-                      Text(_usuario != null ? _usuario.usuario : 'Obtendo dados'),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Text(_usuario != null ? _usuario.nome : 'do seu'),
-                      ),
-                      Text(_usuario != null ? _usuario.email : 'usuário')
-                    ],
-                  ),
-                )
+                Positioned(
+                    bottom: 20,
+                    left: 10,
+                    child: _usuario != null
+                        ? Column(
+                            children: [
+                              Text(_usuario.usuario, style: TextStyle(color: Colors.white)),
+                              Text(_usuario.email, style: TextStyle(color: Colors.white)),
+                            ],
+                          )
+                        : CircularProgressIndicator())
               ],
             ),
             ListTile(title: Text("Opção 1")),

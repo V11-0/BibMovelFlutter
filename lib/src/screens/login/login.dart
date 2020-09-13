@@ -372,7 +372,9 @@ class _LoginState extends State<Login> {
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home())
             , (Route<dynamic> route) => false);
       } else {
-
+        _scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+                content: Text("Ocorreu um erro ao fazer o login")));
       }
     }
   }
